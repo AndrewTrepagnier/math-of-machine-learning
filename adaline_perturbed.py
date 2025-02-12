@@ -10,6 +10,10 @@ X = iris.data[:100, [0, 2]]  # sepal length and petal length
 y = iris.target[:100]        # only first two classes
 y = np.where(y == 0, -1, 1)  # convert to -1 and 1
 
+# Add Gaussian noise to make data non-linearly separable
+np.random.seed(1)  # for reproducibility
+noise = np.random.normal(0, 0.5, X.shape)  # mean=0, std=0.5
+X = X + noise
 
 
 class AdalineGD(object):
