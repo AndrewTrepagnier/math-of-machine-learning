@@ -1,4 +1,10 @@
 import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn import datasets
+np.set_printoptions(suppress=True)
+
+
+
 """
 Perceptron from course
 """
@@ -73,4 +79,32 @@ class Perceptron_course():
         return np.array(wgts_all)
     
 #+++++++++++++++++++++++++++++++++++++++++
+print(dir(datasets))
+
+data_read = datasets.load_iris()
+X = data_read.data
+y = data_read.target
+
+targets = data_read.target_names
+features = data_read.feature_names
+
+N,d = X.shape
+nclass = len(set(y))
+
+#_______________________Take 2 classes in 2D_____________
+X2 = X[y<=1]
+y2 = y[y<=1]
+X2 = X2[:, [0,2]]
+
+#________________________Train and Test___________________
+
+
+Xtrain, Xtest, ytrain, ytest = train_test_split(X2, y2, random_state = None, train_size = 0.7e0)
+
+clf = Perceptron_course(X2.shape[1], epoch=2)
+clf.fit(Xtrain,ytrain)
+wgts_all = clf.fit_and_fig(Xtrain, ytrain)
+accuracy = clf.score(Xtest,ytest)
+print('accuracy = ', accuracy)
+yhat = clf.predict(Xtest)
 
