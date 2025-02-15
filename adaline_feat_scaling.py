@@ -17,8 +17,8 @@ X_std[:,1] = (X[:,1] - X[:,1].mean()) / X[:,1].std()
 
 def plot_decision_regions(X, y, classifier, resolution=0.02):
     # setup marker generator and color map
-    markers = ('s', 'x')  # Changed to only use two markers
-    colors = ('red', 'blue')  # Changed to only use two colors
+    markers = ('s', 'x')  
+    colors = ('red', 'blue')  
     cmap = ListedColormap(colors)
 
     # plot the decision surface
