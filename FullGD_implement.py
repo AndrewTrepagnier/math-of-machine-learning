@@ -42,5 +42,5 @@ plt.scatter(history, [f(i) for i in history], color='red', marker='o', label="Gr
 plt.xlabel("x")
 plt.ylabel("f(x)")
 plt.legend()
-plt.title("Gradient Descent on f(x) = x^2")
+plt.title("Gradient Descent on f(x) = x^2 and step size of %f" %gamma)
 plt.show()
