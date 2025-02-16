@@ -62,9 +62,29 @@ def f_grad(X_):
     print(f"gradient = {grad}")  # Debug print
     return grad
 
+def estimate_gamma(x1, x2):
+    """Estimate good initial gamma based on position
+    
+    We know that smaller step size is better in regions where there is a large change in gradient
+    Additionally, we know that a larger step size is better in regions of small change in gradient
+    
+    """
+
+    dist = np.sqrt((x1-1)**2 + (x2-1)**2)
+    
+    if dist > 5:
+        gamma = 0.001
+    elif dist > 2:
+        gamma = 0.01
+    else:
+        gamma = 0.1
+        
+    print(f"Distance from minimum: {dist:.2f}, estimated γ = {gamma}")
+    return gamma
+
 def optimize(x1, x2):
     X0 = np.array([x1, x2])  # Convert to numpy array
-    gamma0 = 0.3
+    gamma0 = estimate_gamma(x1, x2)  # Initial gamma estimate
     epochs = 10
     
     print(f"Starting at X0 = {X0}")
@@ -77,6 +97,7 @@ def optimize(x1, x2):
             if f(X0 - gamma0*f_grad(X0)) <= f(X0) - (gamma0/2)*(np.linalg.norm(f_grad(X0)))**2:
                 X0 = X0 - gamma0*f_grad(X0)
                 print(f"  → Step accepted, new X = {X0}")  # Debug print
+                gamma0 = estimate_gamma(X0[0], X0[1])  # Update gamma estimate for next iteration
                 break
             else: 
                 gamma0 = gamma0/2
