@@ -15,32 +15,55 @@ import matplotlib.pyplot as plt
 # print(x_next)
 
 # Define the function and its gradient
-def f(x):
-    return x**2
-
-def grad_f(x):
-    return 2*x
 
 
-gamma = .01  
-x = 5.0  
-iterations = 10
-history = [x]  
+def f(X_): # i only designed this for 2D optimization problems so input vector is only two elements
+    result = 100 * (X_[1] - X_[0]**2)**2 + (1 - X_[0])**2
+    print(f"f(X) = {result}")  # Debug print
+    return result
 
-# GD Algorithm
-for i in range(iterations):
-    xnew = x -   gamma*grad_f(x)
-    x = xnew
-    history.append(x)
+def f_grad(X_): 
+    df_x1 = -400*X_[0]*(X_[1] - X_[0]**2) -2 * (1- X_[0])
+    df_x2 =  200 * (X_[1] - X_[0]**2) 
+    grad = np.array([df_x1, df_x2])  # Convert to numpy array
+    print(f"gradient = {grad}")  # Debug print
+    return grad
 
-# Visualization
-x_vals = np.linspace(-6, 6, 100)
-y_vals = f(x_vals)
 
-plt.plot(x_vals, y_vals, label="f(x) = x^2")
-plt.scatter(history, [f(i) for i in history], color='red', marker='o', label="Gradient descent path")
-plt.xlabel("x")
-plt.ylabel("f(x)")
-plt.legend()
-plt.title("Gradient Descent on f(x) = x^2 and step size of %f" %gamma)
-plt.show()
+def optimize(x1, x2, g):
+    X_ = np.array([x1,x2])
+    gamma = g
+    epochs = 10
+    
+    print(f"Starting at X = {X_}")
+    print(f"Initial function value = {f(X_)}")
+    
+    for n in range(epochs):
+        grad = f_grad(X_)
+        X_new = X_ - gamma*(grad)
+        
+        # Check for explosion
+        if np.any(np.abs(X_new) > 1e10) or np.any(np.isnan(X_new)):
+            print("\n⚠️ EXPLOSION DETECTED!")
+            print(f"  Iteration {n}")
+            print(f"  Previous X = {X_}")
+            print(f"  Gradient = {grad}")
+            print(f"  Step = {gamma*grad}")
+            print(f"  Exploded to X = {X_new}")
+            return X_  # Return last valid position
+            
+        print(f"\nEpoch {n}:")
+        print(f"  Gradient = {grad}")
+        print(f"  Step size = {gamma}")
+        print(f"  New X = {X_new}")
+        print(f"  New function value = {f(X_new)}")
+        
+        X_ = X_new
+        
+    return X_
+
+print(f"Final Result: {optimize(5,4, 0.01)}")
+
+print("++++++++++++++++++++++++++++Smaller Step++++++++++++++++++")
+
+print(f"Final Result: {optimize(5,4, 0.0001)}")
