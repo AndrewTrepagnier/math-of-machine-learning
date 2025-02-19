@@ -28,7 +28,7 @@ grad_n = f_grad(Xn)  # Current gradient
 
 # 2. Take a step using Newton's method instead of gradient descent
 newton_dir = inverse_hess(Xn) @ grad_n  # Newton direction
-gamma = 0.01
+gamma = 0.1
 Xn_next = Xn - gamma * newton_dir  # Note the minus sign
 
 # 3. Now we can compute s_n and y_n
