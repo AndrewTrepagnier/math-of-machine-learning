@@ -1,5 +1,6 @@
 from scipy import optimize
 import numpy as np
+import matplotlib.pyplot as plt
 
 #===============================================
 
@@ -89,6 +90,8 @@ def optimize(x1, x2):
     
     print(f"Starting at X0 = {X0}")
     
+    history = [X0.copy()]  # Initialize history list
+    
     for n in range(epochs):
         print("=========================================================")
         print(f"\nEpoch {n+1}:")
@@ -96,6 +99,7 @@ def optimize(x1, x2):
             print(f"  Current X = {X0}, γ = {gamma0}")  # Debug print
             if f(X0 - gamma0*f_grad(X0)) <= f(X0) - (gamma0/2)*(np.linalg.norm(f_grad(X0)))**2:
                 X0 = X0 - gamma0*f_grad(X0)
+                history.append(X0.copy())  # Store new point
                 print(f"  → Step accepted, new X = {X0}")  # Debug print
                 gamma0 = estimate_gamma(X0[0], X0[1])  # Update gamma estimate for next iteration
                 break
@@ -103,10 +107,40 @@ def optimize(x1, x2):
                 gamma0 = gamma0/2
                 print(f"  → Step rejected, reducing γ to {gamma0}")  # Debug print
     
-    return X0
+    return X0, history
 
 # Run the optimization
-result = optimize(5,4)
+result, history = optimize(5,4)
 print(f"Final result: {result}")
+
+# Create plot
+plt.figure(figsize=(10,8))
+
+# Create contour data
+x = np.linspace(-2, 6, 100)
+y = np.linspace(-2, 6, 100)
+X, Y = np.meshgrid(x, y)
+Z = 100*(Y - X**2)**2 + (1-X)**2
+
+# Plot contours
+levels = [0.1, 0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000]
+plt.contour(X, Y, Z, levels=levels)
+
+# Plot optimization path
+history = np.array(history)
+plt.plot(history[:,0], history[:,1], 'ro-', label='Optimization path')
+plt.plot(history[0,0], history[0,1], 'go', label='Start')
+plt.plot(history[-1,0], history[-1,1], 'bo', label='End')
+
+# Add point numbers
+for i, point in enumerate(history):
+    plt.annotate(f'{i}', (point[0], point[1]), xytext=(10, 10), textcoords='offset points')
+
+plt.grid(True)
+plt.xlabel('x₁')
+plt.ylabel('x₂')
+plt.title('Gradient Descent with Backtracking Line Search')
+plt.legend()
+plt.show()
          
 

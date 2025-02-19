@@ -40,7 +40,7 @@ y_n = grad_next - grad_n
 H_current = inverse_hess(Xn)  # Get actual inverse Hessian at current point
 B_current = np.linalg.inv(H_current)  # Get actual Hessian
 
-# Verify they're inverses before updates
+
 print("\nVerifying initial H*B = I:")
 print(H_current @ B_current)
 print("Difference from identity:", np.linalg.norm(H_current @ B_current - np.eye(2)))
@@ -65,7 +65,7 @@ print(H_next)
 print("\nB_next (Direct Hessian):")
 print(B_next)
 
-# Verify both secant conditions
+
 print("\nVerifying Secant Conditions:")
 print("y_n =", y_n)
 print("H_next @ s_n =", H_next @ s_n)
@@ -74,18 +74,18 @@ print("\nDifferences (should be close to zero):")
 print("H difference:", np.linalg.norm(y_n - H_next @ s_n))
 print("B difference:", np.linalg.norm(y_n - B_next @ s_n))
 
-# Verify H_next and B_next are inverses
+
 print("\nVerifying H_next * B_next = Identity:")
 HB_product = H_next @ B_next
 print("H_next @ B_next =")
 print(HB_product)
 
-# Check how close to identity
+
 I = np.eye(2)
 print("\nDifference from identity (should be close to zero):")
 print(np.linalg.norm(HB_product - I))
 
-# Also check the other direction
+
 print("\nB_next @ H_next =")
 print(B_next @ H_next)
 print("\nDifference from identity (should be close to zero):")
@@ -94,9 +94,9 @@ print(np.linalg.norm(B_next @ H_next - I))
 #================== Continue BFGS Iteration ==================
 # Store first iteration results
 history_of_iterations = [Xn.copy(), Xn_next.copy()]
-H_current = H_next  # Use our updated Hessian
+H_current = H_next 
 
-# Let's do a few more iterations
+
 for i in range(9):  
     Xn = history_of_iterations[-1] 
     grad_n = f_grad(Xn)
