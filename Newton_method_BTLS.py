@@ -23,7 +23,7 @@ def inverse_hess(X_):
     return np.linalg.inv(hessian)
 
 #================== INITIALIZATION ==================
-epochs = 10
+epochs = 30
 gamma_init = 0.1
 Xn = np.array([0.5, -0.5])
 history_newton = []
@@ -41,6 +41,8 @@ for n in range(epochs):
     newton_dir = inverse_hess(Xn) @ grad
     
     while True:
+
+
         if f(Xn - gamma*newton_dir) <= f(Xn) - (gamma/2)*(grad @ newton_dir):
             Xn = Xn - gamma*newton_dir
             history_newton.append(Xn.copy())
