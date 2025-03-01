@@ -1,15 +1,19 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
-def Batch():
+X = ([0.0, 1.1] ,
+    [1.0, 2.6] ,
+    [2.0, 7.2],
+    [3.0, 21.1])
+X = np.array(X)   
+
+
+def BatchGD(X,Y):
 
     learning_rate = 0.01
 
-    X = ([2.1, 3.7] ,
-         [8.3, 5.9] ,
-         [1.5, 1.8])
     
-    Y = [1, -1, 1]
 
     w = np.random.uniform(0, 0.05, 2) # random values in specific range (0 to 0.05)
     b = np.random.uniform(0, 0.05, 1)
@@ -36,7 +40,11 @@ def Batch():
     print(f"after sample {i} was complete, w = {w} and b = {b}")
     return
 
-Batch()
+
+
+plt.scatter(X[:, 0], X[:, 1])  # X[:, 0] gets all x-coords, X[:, 1] gets all y-coords
+plt.show()
+
 
 
 """
@@ -53,3 +61,4 @@ How can you tell these are adaline implementations?
 
 
 """
+
