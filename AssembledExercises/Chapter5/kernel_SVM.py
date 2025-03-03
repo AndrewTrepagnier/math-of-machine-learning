@@ -1,3 +1,4 @@
+#+++++++++++++++++++++++ IMPORTS AND SETUP +++++++++++++++++++++++
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
@@ -7,6 +8,7 @@ from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from inseperable_dataset import X_xor, y_xor
 
+#+++++++++++++++++++++++ DATA PREPARATION +++++++++++++++++++++++
 # Load iris data
 iris = datasets.load_iris()
 X = iris.data[:, [0, 2]]  # sepal length and petal length
@@ -30,6 +32,7 @@ X_combined_std = np.vstack((X_train_std, X_test_std))
 y_combined = np.hstack((y_train, y_test))
 test_idx = range(len(y_train), len(y_combined))
 
+#+++++++++++++++++++++++ UTILITY FUNCTIONS +++++++++++++++++++++++
 def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
     # setup marker generator and color map
     markers = ('s', 'x', 'o', '^', 'v')
@@ -69,6 +72,7 @@ def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
                    s=100,
                    label='test set')
 
+#+++++++++++++++++++++++ LINEAR SVM MODEL +++++++++++++++++++++++
 # Train SVM with linear kernel
 svm = SVC(kernel='linear', C=1.0, random_state=1)
 svm.fit(X_train_std, y_train)
@@ -83,9 +87,10 @@ plt.xlabel('sepal length [standardized]')
 plt.ylabel('petal length [standardized]')
 plt.legend(loc='upper left')
 plt.tight_layout()
-plt.show()
+#plt.show()
 
-# After plotting our custom models, add sklearn's implementation
+#+++++++++++++++++++++++ LOGISTIC REGRESSION MODEL +++++++++++++++++++++++
+# Create and train sklearn's logistic regression
 plt.figure(figsize=(8, 6))
 
 # Create and train sklearn's logistic regression
@@ -102,10 +107,9 @@ plt.xlabel('sepal length [standardized]')
 plt.ylabel('petal length [standardized]')
 plt.legend(loc='upper left')
 plt.tight_layout()
-plt.show()
+#plt.show()
 
-# After the logistic regression plot, add the XOR example with RBF kernel
-
+#+++++++++++++++++++++++ RBF KERNEL SVM FOR XOR DATA +++++++++++++++++++++++
 # Create a new figure for XOR dataset
 plt.figure(figsize=(8, 6))
 
@@ -118,6 +122,21 @@ plot_decision_regions(X_xor, y_xor, classifier=svm_rbf)
 plt.title('SVM with RBF Kernel on XOR Dataset')
 plt.xlabel('Feature 1')
 plt.ylabel('Feature 2')
+plt.legend(loc='upper left')
+plt.tight_layout()
+#plt.show()
+
+#+++++++++++++++++++++++ RBF KERNEL SVM FOR STANDARDIZED IRIS DATA +++++++++++++++++++++++
+
+plt.figure(figsize=(8,6))
+
+svm_rbf_iris = SVC(kernel='rbf', random_state=1, gamma=100, C=1.0)
+svm_rbf_iris.fit(X_train_std, y_train)
+
+plot_decision_regions(X_combined_std, y_combined, classifier=svm_rbf_iris, test_idx=test_idx)
+plt.title('SVM with RBF Kernel on the Standardized Iris Dataset')
+plt.xlabel('sepal length [standardized]')
+plt.ylabel('petal length [standardized]')
 plt.legend(loc='upper left')
 plt.tight_layout()
 plt.show()
