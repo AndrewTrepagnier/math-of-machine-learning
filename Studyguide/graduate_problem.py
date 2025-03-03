@@ -46,7 +46,6 @@ plt.scatter(X[:, 0], X[:, 1])  # X[:, 0] gets all x-coords, X[:, 1] gets all y-c
 plt.show()
 
 
-
 """
 Discussion:
 

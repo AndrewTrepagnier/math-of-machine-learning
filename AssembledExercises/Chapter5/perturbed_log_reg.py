@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import datasets
 from matplotlib.colors import ListedColormap
+from sklearn.linear_model import LogisticRegression
 
 
 """
@@ -185,53 +186,73 @@ reg_model = logisticregGD(n_iter=30, eta=0.01, lambda_param=0.1)
 reg_model.fit(X_std, y)
 
 # Create plots - now with 6 subplots to compare all models
-plt.figure(figsize=(15, 12))
+plt.figure(figsize=(10, 10))
 
 # Plot 1: Original Data Decision Regions
 plt.subplot(3, 2, 1)
 plot_decision_regions(X_original_std, y, classifier=original_model)
-plt.title('Original Data - Decision Boundary')
-plt.xlabel('sepal length [standardized]')
-plt.ylabel('petal length [standardized]')
-plt.legend(loc='upper left')
+plt.title('Original Data - Decision Boundary', fontsize=8)
+plt.xlabel('sepal length [standardized]', fontsize=8)
+plt.ylabel('petal length [standardized]', fontsize=8)
+plt.legend(loc='upper left', fontsize=8)
 
 # Plot 2: Original Data Cost Function
 plt.subplot(3, 2, 2)
-plt.plot(range(1, len(original_model.cost_) + 1), original_model.cost_, marker='o')
-plt.xlabel('Epochs')
-plt.ylabel('Log Loss')
-plt.title('Original Data - Cost Function')
+plt.plot(range(1, len(original_model.cost_) + 1), original_model.cost_, marker='o', markersize=3)
+plt.xlabel('Epochs', fontsize=8)
+plt.ylabel('Log Loss', fontsize=8)
+plt.title('Original Data - Cost Function', fontsize=8)
+plt.tick_params(axis='both', which='major', labelsize=8)
 
 # Plot 3: Noisy Data Decision Regions
 plt.subplot(3, 2, 3)
 plot_decision_regions(X_std, y, classifier=noisy_model)
-plt.title('Noisy Data - Decision Boundary')
-plt.xlabel('sepal length [standardized]')
-plt.ylabel('petal length [standardized]')
-plt.legend(loc='upper left')
+plt.title('Noisy Data - Decision Boundary', fontsize=8)
+plt.xlabel('sepal length [standardized]', fontsize=8)
+plt.ylabel('petal length [standardized]', fontsize=8)
+plt.legend(loc='upper left', fontsize=8)
 
 # Plot 4: Noisy Data Cost Function
 plt.subplot(3, 2, 4)
-plt.plot(range(1, len(noisy_model.cost_) + 1), noisy_model.cost_, marker='o')
-plt.xlabel('Epochs')
-plt.ylabel('Log Loss')
-plt.title('Noisy Data - Cost Function')
+plt.plot(range(1, len(noisy_model.cost_) + 1), noisy_model.cost_, marker='o', markersize=3)
+plt.xlabel('Epochs', fontsize=8)
+plt.ylabel('Log Loss', fontsize=8)
+plt.title('Noisy Data - Cost Function', fontsize=8)
+plt.tick_params(axis='both', which='major', labelsize=8)
 
 # Plot 5: Regularized Model Decision Regions
 plt.subplot(3, 2, 5)
 plot_decision_regions(X_std, y, classifier=reg_model)
-plt.title('Noisy Data with L2 Regularization - Decision Boundary')
-plt.xlabel('sepal length [standardized]')
-plt.ylabel('petal length [standardized]')
-plt.legend(loc='upper left')
+plt.title('Noisy Data with L2 Regularization', fontsize=8)
+plt.xlabel('sepal length [standardized]', fontsize=8)
+plt.ylabel('petal length [standardized]', fontsize=8)
+plt.legend(loc='upper left', fontsize=8)
 
 # Plot 6: Regularized Model Cost Function
 plt.subplot(3, 2, 6)
-plt.plot(range(1, len(reg_model.cost_) + 1), reg_model.cost_, marker='o')
-plt.xlabel('Epochs')
-plt.ylabel('Log Loss')
-plt.title('Noisy Data with L2 Regularization - Cost Function')
+plt.plot(range(1, len(reg_model.cost_) + 1), reg_model.cost_, marker='o', markersize=3)
+plt.xlabel('Epochs', fontsize=8)
+plt.ylabel('Log Loss', fontsize=8)
+plt.title('Regularized Model - Cost Function', fontsize=8)
+plt.tick_params(axis='both', which='major', labelsize=8)
 
+plt.tight_layout(pad=1.5)
+plt.show()
+
+# After plotting our custom models, add sklearn's implementation
+plt.figure(figsize=(8, 6))
+
+# Create and train sklearn's logistic regression
+lr = LogisticRegression(C=100.0, random_state=1,
+                       solver='lbfgs', multi_class='ovr')
+lr.fit(X_std, y)  # Using our standardized noisy data
+
+# Plot decision regions
+plot_decision_regions(X_std, y, classifier=lr)
+plt.title('Scikit-learn Logistic Regression', fontsize=8)
+plt.xlabel('sepal length [standardized]', fontsize=8)
+plt.ylabel('petal length [standardized]', fontsize=8)
+plt.legend(loc='upper left', fontsize=8)
 plt.tight_layout()
 plt.show()
 
